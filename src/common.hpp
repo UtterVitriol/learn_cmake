@@ -1,4 +1,5 @@
 #pragma once
+#include <Windows.h>
 
-int add(int a, int b);
-int sub(int a, int );
+typedef int(*tMessageBoxA)(HWND, LPCSTR, LPCSTR, ULONG);
+int init_hooks();

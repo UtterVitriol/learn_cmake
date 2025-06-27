@@ -1,9 +1,24 @@
-#include <cstdio>
+#include <Windows.h>
 #include "common.hpp"
+#include "../minhook/include/MinHook.h"
 
 int
 main ()
 {
-    printf("Hello from here: %d\n", add(5, 10));
-    printf("Hello from here, too: %d\n", sub(10, 5));
+    if(MH_OK != MH_Initialize())
+    {
+        goto END;
+    }
+
+    if(MH_OK != init_hooks())
+    {
+        goto END;
+    }
+
+    MessageBoxA(0, "Have a good day", "Good Morning", 0);
+
+END:
+    MH_DisableHook(MH_ALL_HOOKS);
+    MH_Uninitialize();
+    return 0;
 }

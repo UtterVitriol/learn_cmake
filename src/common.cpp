@@ -1,11 +1,34 @@
 #include "common.hpp"
+#include <Windows.h>
+#include <cstdio>
+#include "../minhook/include/MinHook.h"
 
-int add(int a, int b)
+tMessageBoxA oMessageBoxA = NULL;
+
+int hMessageBoxA(HWND hWnd, LPCSTR text, LPCSTR caption, ULONG uType)
 {
-    return a + b;
+    printf("%s: %s\n", text, caption);
+    return oMessageBoxA(hWnd, "Go fuck yourself", "REE", uType);
 }
 
-int sub(int a, int b)
+int
+init_hooks ()
 {
-    return a - b;
+    int status = 0;
+
+    if (MH_OK
+        != (status
+            = MH_CreateHook(MessageBoxA, hMessageBoxA, (LPVOID *)&oMessageBoxA)))
+    {
+        return status;
+    }
+
+    if(MH_OK != (status = MH_EnableHook(MH_ALL_HOOKS)))
+    {
+        return status;
+    }
+
+    printf("Status: %d\n", status);
+
+    return status;
 }
